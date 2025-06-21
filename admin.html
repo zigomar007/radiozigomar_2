@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Radio Zigomar 89.3 FM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a1a1a;
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            color: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .admin-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .admin-card h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .message-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .message-name {
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        .message-time {
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+        
+        .message-content {
+            color: #ddd;
+            line-height: 1.5;
+        }
+        
+        .playlist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .track-info {
+            flex: 1;
+        }
+        
+        .track-title {
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        .track-artist {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .current-track {
+            border: 2px solid #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notification.success {
+            background: #4CAF50;
+        }
+        
+        .notification.error {
+            background: #f44336;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🎙️ Administration Radio Zigomar 89.3 FM</h1>
+            <p>Panneau de contrôle pour la gestion de la radio</p>
+        </div>
+
+        <div class="admin-grid">
+            <!-- Statistiques -->
+            <div class="admin-card">
+                <h3>📊 Statistiques en Temps Réel</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="listeners-stat">247</div>
+                        <div class="stat-label">Auditeurs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="messages-stat">0</div>
+                        <div class="stat-label">Messages</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="playlist-stat">0</div>
+                        <div class="stat-label">En Attente</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="uptime-stat">0h</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+                <button class="btn" onclick="refreshStats()">🔄 Actualiser</button>
+            </div>
+
+            <!-- Émission Actuelle -->
+            <div class="admin-card">
+                <h3>🎙️ Émission Actuelle</h3>
+                <form id="show-form">
+                    <div class="form-group">
+                        <label>Titre de l'émission</label>
+                        <input type="text" id="show-title" placeholder="Jazz Matinal">
+                    </div>
+                    <div class="form-group">
+                        <label>Animateur</label>
+                        <input type="text" id="show-host" placeholder="Marie Dubois">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="show-description" rows="3" placeholder="Description de l'émission..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <select id="show-genre">
+                            <option value="Jazz">Jazz</option>
+                            <option value="Rock">Rock</option>
+                            <option value="Électronique">Électronique</option>
+                            <option value="Classique">Classique</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">📡 Mettre à Jour</button>
+                </form>
+            </div>
+
+            <!-- Gestion Playlist -->
+            <div class="admin-card">
+                <h3>🎵 Gestion Playlist</h3>
+                <form id="playlist-form">
+                    <div class="form-group">
+                        <label>Titre</label>
+                        <input type="text" id="track-title" placeholder="Nom de la chanson" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Artiste</label>
+                        <input type="text" id="track-artist" placeholder="Nom de l'artiste" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Album</label>
+                        <input type="text" id="track-album" placeholder="Nom de l'album">
+                    </div>
+                    <div class="form-group">
+                        <label>Durée</label>
+                        <input type="text" id="track-duration" placeholder="03:45">
+                    </div>
+                    <button type="submit" class="btn">➕ Ajouter à la Playlist</button>
+                </form>
+                
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="nextTrack()">⏭️ Piste Suivante</button>
+                    <button class="btn btn-secondary" onclick="loadPlaylist()">🔄 Actualiser</button>
+                </div>
+                
+                <div id="playlist-display" style="margin-top: 20px; max-height: 300px; overflow-y: auto;">
+                    <!-- Playlist sera chargée ici -->
+                </div>
+            </div>
+
+            <!-- Messages des Auditeurs -->
+            <div class="admin-card">
+                <h3>📧 Messages des Auditeurs</h3>
+                <div style="margin-bottom: 15px;">
+                    <button class="btn btn-secondary" onclick="loadMessages()">🔄 Actualiser</button>
+                    <button class="btn btn-secondary" onclick="loadMessages('dedicace')">💝 Dédicaces</button>
+                    <button class="btn btn-secondary" onclick="loadMessages('suggestion')">💡 Suggestions</button>
+                </div>
+                <div id="messages-display" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Messages seront chargés ici -->
+                </div>
+            </div>
+
+            <!-- Dédicaces en Direct -->
+            <div class="admin-card">
+                <h3>💝 Dédicaces en Direct</h3>
+                <p style="color: #ccc; margin-bottom: 15px;">Prochaines dédicaces à passer à l'antenne</p>
+                <div id="live-dedicaces" style="max-height: 300px; overflow-y: auto;">
+                    <!-- Dédicaces seront chargées ici -->
+                </div>
+                <button class="btn btn-secondary" onclick="loadLiveDedicaces()">🔄 Actualiser</button>
+            </div>
+
+            <!-- Contrôles Rapides -->
+            <div class="admin-card">
+                <h3>⚡ Contrôles Rapides</h3>
+                <div style="display: grid; gap: 10px;">
+                    <button class="btn" onclick="simulateListenerIncrease()">📈 +10 Auditeurs</button>
+                    <button class="btn" onclick="simulateListenerDecrease()">📉 -10 Auditeurs</button>
+                    <button class="btn btn-secondary" onclick="clearOldMessages()">🧹 Nettoyer Messages</button>
+                    <button class="btn btn-secondary" onclick="exportData()">💾 Exporter Données</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiConnected = false;
+
+        // Vérifier la connexion API au chargement
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/stats');
+                if (response.ok) {
+                    apiConnected = true;
+                    console.log('🌐 API connectée');
+                    await refreshStats();
+                    await loadPlaylist();
+                    await loadMessages();
+                    await loadLiveDedicaces();
+                    
+                    // Auto-refresh toutes les 30 secondes
+                    setInterval(refreshStats, 30000);
+                } else {
+                    throw new Error('API non disponible');
+                }
+            } catch (error) {
+                console.error('❌ API non disponible:', error);
+                showNotification('⚠️ Serveur Node.js non démarré. Fonctionnalités limitées.', 'error');
+                apiConnected = false;
+            }
+        });
+
+        // Actualiser les statistiques
+        async function refreshStats() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch('/api/stats');
+                const stats = await response.json();
+                
+                document.getElementById('listeners-stat').textContent = stats.listeners;
+                document.getElementById('messages-stat').textContent = stats.totalMessages;
+                document.getElementById('playlist-stat').textContent = stats.playlistLength;
+                document.getElementById('uptime-stat').textContent = Math.floor(stats.uptime / 3600) + 'h';
+            } catch (error) {
+                console.error('Erreur stats:', error);
+            }
+        }
+
+        // Mettre à jour l'émission
+        document.getElementById('show-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!apiConnected) {
+                showNotification('⚠️ Serveur non disponible', 'error');
+                return;
+            }
+            
+            const showData = {
+                title: document.getElementById('show-title').value,
+                host: document.getElementById('show-host').value,
+                description: document.getElementById('show-description').value,
+                genre: document.getElementById('show-genre').value,
+                listeners: parseInt(document.getElementById('listeners-stat').textContent),
+                startTime: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/current-show/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(showData)
+                });
+                
+                if (response.ok) {
+                    showNotification('✅ Émission mise à jour !', 'success');
+                } else {
+                    throw new Error('Erreur serveur');
+                }
+            } catch (error) {
+                showNotification('❌ Erreur mise à jour', 'error');
+            }
+        });
+
+        // Ajouter une piste à la playlist
+        document.getElementById('playlist-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!apiConnected) {
+                showNotification('⚠️ Serveur non disponible', 'error');
+                return;
+            }
+            
+            const trackData = {
+                title: document.getElementById('track-title').value,
+                artist: document.getElementById('track-artist').value,
+                album: document.getElementById('track-album').value || 'Single',
+                duration: document.getElementById('track-duration').value || '03:00'
+            };
+            
+            try {
+                const response = await fetch('/api/playlist/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(trackData)
+                });
+                
+                if (response.ok) {
+                    showNotification('🎵 Piste ajoutée à la playlist !', 'success');
+                    document.getElementById('playlist-form').reset();
+                    await loadPlaylist();
+                    await refreshStats();
+                } else {
+                    throw new Error('Erreur serveur');
+                }
+            } catch (error) {
+                showNotification('❌ Erreur ajout piste', 'error');
+            }
+        });
+
+        // Charger la playlist
+        async function loadPlaylist() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch('/api/playlist');
+                const playlist = await response.json();
+                
+                const display = document.getElementById('playlist-display');
+                display.innerHTML = '';
+                
+                // Piste actuelle
+                if (playlist.currentTrack) {
+                    const currentDiv = document.createElement('div');
+                    currentDiv.className = 'playlist-item current-track';
+                    currentDiv.innerHTML = `
+                        <div class="track-info">
+                            <div class="track-title">🎵 ${playlist.currentTrack.title}</div>
+                            <div class="track-artist">${playlist.currentTrack.artist}</div>
+                        </div>
+                        <div style="color: #4CAF50; font-weight: 600;">EN COURS</div>
+                    `;
+                    display.appendChild(currentDiv);
+                }
+                
+                // File d'attente
+                playlist.queue.forEach((track, index) => {
+                    const trackDiv = document.createElement('div');
+                    trackDiv.className = 'playlist-item';
+                    trackDiv.innerHTML = `
+                        <div class="track-info">
+                            <div class="track-title">${index + 1}. ${track.title}</div>
+                            <div class="track-artist">${track.artist} - ${track.duration}</div>
+                        </div>
+                    `;
+                    display.appendChild(trackDiv);
+                });
+                
+                if (playlist.queue.length === 0) {
+                    display.innerHTML = '<p style="color: #ccc; text-align: center; padding: 20px;">Aucune piste en attente</p>';
+                }
+            } catch (error) {
+                console.error('Erreur playlist:', error);
+            }
+        }
+
+        // Passer à la piste suivante
+        async function nextTrack() {
+            if (!apiConnected) {
+                showNotification('⚠️ Serveur non disponible', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/playlist/next', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    showNotification('⏭️ Piste suivante !', 'success');
+                    await loadPlaylist();
+                } else {
+                    const error = await response.json();
+                    showNotification('⚠️ ' + error.error, 'error');
+                }
+            } catch (error) {
+                showNotification('❌ Erreur piste suivante', 'error');
+            }
+        }
+
+        // Charger les messages
+        async function loadMessages(type = 'all') {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch('/api/messages');
+                const data = await response.json();
+                
+                let messages = [];
+                if (type === 'dedicace') {
+                    messages = data.dedicaces;
+                } else if (type === 'suggestion') {
+                    messages = data.suggestions;
+                } else {
+                    messages = [...data.messages, ...data.dedicaces, ...data.suggestions]
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                }
+                
+                const display = document.getElementById('messages-display');
+                display.innerHTML = '';
+                
+                if (messages.length === 0) {
+                    display.innerHTML = '<p style="color: #ccc; text-align: center; padding: 20px;">Aucun message</p>';
+                    return;
+                }
+                
+                messages.slice(0, 10).forEach(message => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message-item';
+                    if (!message.read) {
+                        messageDiv.style.borderLeftColor = '#ff6b35';
+                    }
+                    
+                    messageDiv.innerHTML = `
+                        <div class="message-header">
+                            <span class="message-name">${message.name} (${message.type})</span>
+                            <span class="message-time">${new Date(message.timestamp).toLocaleString()}</span>
+                        </div>
+                        <div class="message-content">
+                            <strong>${message.subject}</strong><br>
+                            ${message.message}
+                        </div>
+                        ${!message.read ? `<button class="btn" style="margin-top: 10px; padding: 5px 10px; font-size: 0.8rem;" onclick="markAsRead(${message.id})">✅ Marquer comme lu</button>` : ''}
+                    `;
+                    display.appendChild(messageDiv);
+                });
+            } catch (error) {
+                console.error('Erreur messages:', error);
+            }
+        }
+
+        // Marquer un message comme lu
+        async function markAsRead(messageId) {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch(`/api/messages/${messageId}/read`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    showNotification('✅ Message marqué comme lu', 'success');
+                    await loadMessages();
+                    await refreshStats();
+                }
+            } catch (error) {
+                console.error('Erreur marquage lu:', error);
+            }
+        }
+
+        // Charger les dédicaces en direct
+        async function loadLiveDedicaces() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch('/api/dedicaces/live');
+                const dedicaces = await response.json();
+                
+                const display = document.getElementById('live-dedicaces');
+                display.innerHTML = '';
+                
+                if (dedicaces.length === 0) {
+                    display.innerHTML = '<p style="color: #ccc; text-align: center; padding: 20px;">Aucune dédicace en attente</p>';
+                    return;
+                }
+                
+                dedicaces.forEach(dedicace => {
+                    const dedicaceDiv = document.createElement('div');
+                    dedicaceDiv.className = 'message-item';
+                    dedicaceDiv.innerHTML = `
+                        <div class="message-header">
+                            <span class="message-name">💝 ${dedicace.name}</span>
+                            <button class="btn" style="padding: 5px 10px; font-size: 0.8rem;" onclick="markDedicacePlayed(${dedicace.id})">📻 Passée</button>
+                        </div>
+                        <div class="message-content">${dedicace.message}</div>
+                    `;
+                    display.appendChild(dedicaceDiv);
+                });
+            } catch (error) {
+                console.error('Erreur dédicaces:', error);
+            }
+        }
+
+        // Marquer une dédicace comme passée
+        async function markDedicacePlayed(dedicaceId) {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch(`/api/dedicaces/${dedicaceId}/played`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    showNotification('📻 Dédicace marquée comme passée', 'success');
+                    await loadLiveDedicaces();
+                }
+            } catch (error) {
+                console.error('Erreur dédicace passée:', error);
+            }
+        }
+
+        // Simuler augmentation auditeurs
+        async function simulateListenerIncrease() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch('/api/current-show');
+                const show = await response.json();
+                show.listeners += 10;
+                
+                await fetch('/api/current-show/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(show)
+                });
+                
+                showNotification('📈 +10 auditeurs !', 'success');
+                await refreshStats();
+            } catch (error) {
+                console.error('Erreur simulation:', error);
+            }
+        }
+
+        // Simuler diminution auditeurs
+        async function simulateListenerDecrease() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch('/api/current-show');
+                const show = await response.json();
+                show.listeners = Math.max(0, show.listeners - 10);
+                
+                await fetch('/api/current-show/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(show)
+                });
+                
+                showNotification('📉 -10 auditeurs', 'success');
+                await refreshStats();
+            } catch (error) {
+                console.error('Erreur simulation:', error);
+            }
+        }
+
+        // Nettoyer les anciens messages
+        async function clearOldMessages() {
+            if (!apiConnected) return;
+            
+            if (confirm('Supprimer tous les messages de plus d\'une semaine ?')) {
+                showNotification('🧹 Nettoyage en cours...', 'success');
+                // Cette fonctionnalité serait implémentée côté serveur
+            }
+        }
+
+        // Exporter les données
+        async function exportData() {
+            if (!apiConnected) return;
+            
+            try {
+                const [playlist, messages, stats] = await Promise.all([
+                    fetch('/api/playlist').then(r => r.json()),
+                    fetch('/api/messages').then(r => r.json()),
+                    fetch('/api/stats').then(r => r.json())
+                ]);
+                
+                const exportData = {
+                    timestamp: new Date().toISOString(),
+                    playlist,
+                    messages,
+                    stats
+                };
+                
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                    type: 'application/json'
+                });
+                
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `radio-zigomar-export-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                
+                showNotification('💾 Données exportées !', 'success');
+            } catch (error) {
+                console.error('Erreur export:', error);
+                showNotification('❌ Erreur export', 'error');
+            }
+        }
+
+        // Afficher une notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

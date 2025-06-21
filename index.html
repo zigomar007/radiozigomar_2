@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Zigomar 89.3 FM - La Voix du Café</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📻</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="radio-icon">📻</span>
+                <div class="logo-text">
+                    <h2>Radio Zigomar</h2>
+                    <span class="frequency">89.3 FM</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#accueil" class="nav-link">Accueil</a></li>
+                <li><a href="#direct" class="nav-link">En Direct</a></li>
+                <li><a href="#programmes" class="nav-link">Programmes</a></li>
+                <li><a href="#equipe" class="nav-link">Équipe</a></li>
+                <li><a href="#partenaires" class="nav-link">Partenaires</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="hero">
+        <div class="hero-background">
+            <div class="vinyl-record"></div>
+            <div class="sound-waves"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Radio Zigomar</h1>
+                <p class="hero-frequency">89.3 FM</p>
+                <p class="hero-tagline">La Voix du Café • Depuis le Cœur de Zigomar</p>
+                <p class="hero-description">
+                    Diffusion locale et mondiale • Relais internationaux avec nos cafés partenaires
+                </p>
+                
+                <!-- Live Player -->
+                <div class="live-player" id="live-player">
+                    <div class="player-controls">
+                        <button class="play-btn" id="play-btn">
+                            <span class="play-icon">▶️</span>
+                            <span class="pause-icon" style="display: none;">⏸️</span>
+                        </button>
+                        <div class="player-info">
+                            <div class="now-playing">
+                                <span class="live-indicator">🔴 EN DIRECT</span>
+                                <div class="track-info" id="track-info">
+                                    <span class="track-title">Jazz Matinal</span>
+                                    <span class="track-artist">avec Marie Dubois</span>
+                                </div>
+                            </div>
+                            <div class="volume-control">
+                                <span class="volume-icon">🔊</span>
+                                <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="audio-visualizer" id="audio-visualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+
+                <div class="hero-buttons">
+                    <button class="cta-button primary" onclick="scrollToSection('programmes')">
+                        📅 Voir les Programmes
+                    </button>
+                    <a href="https://www.facebook.com/profile.php?id=61572504539153" target="_blank" class="cta-button secondary">
+                        📘 Suivez-nous
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Studio Radio Zigomar">
+                <div class="studio-overlay">
+                    <div class="on-air-sign">ON AIR</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Section -->
+    <section id="direct" class="live-section">
+        <div class="container">
+            <h2 class="section-title">🔴 En Direct Maintenant</h2>
+            
+            <div class="live-content">
+                <div class="current-show">
+                    <div class="show-image">
+                        <img src="https://images.pexels.com/photos/3784424/pexels-photo-3784424.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Émission en cours">
+                        <div class="live-badge">LIVE</div>
+                    </div>
+                    <div class="show-info">
+                        <h3 class="show-title" id="current-show-title">Café & Mélodies</h3>
+                        <p class="show-host">avec <strong id="current-host">Sophie Martin</strong></p>
+                        <p class="show-time">14h00 - 16h00</p>
+                        <p class="show-description" id="current-description">
+                            Un voyage musical à travers les genres, accompagné des meilleurs cafés du monde. 
+                            Découvertes musicales et histoires de grains.
+                        </p>
+                        <div class="show-stats">
+                            <span class="stat">
+                                <span class="stat-icon">👥</span>
+                                <span class="stat-value" id="listeners-count">247</span>
+                                <span class="stat-label">auditeurs</span>
+                            </span>
+                            <span class="stat">
+                                <span class="stat-icon">🌍</span>
+                                <span class="stat-value">12</span>
+                                <span class="stat-label">pays</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-shows">
+                    <h4>À Suivre</h4>
+                    <div class="next-show-item">
+                        <span class="next-time">16h00</span>
+                        <span class="next-title">Relais International - Café Milano</span>
+                    </div>
+                    <div class="next-show-item">
+                        <span class="next-time">17h00</span>
+                        <span class="next-title">Jazz & Espresso</span>
+                    </div>
+                    <div class="next-show-item">
+                        <span class="next-time">19h00</span>
+                        <span class="next-title">Soirée Acoustique</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section id="programmes" class="programs">
+        <div class="container">
+            <h2 class="section-title">📅 Nos Programmes</h2>
+            <p class="section-subtitle">Une programmation riche, 7 jours sur 7</p>
+            
+            <div class="schedule-tabs">
+                <button class="tab-btn active" data-day="lundi">Lundi</button>
+                <button class="tab-btn" data-day="mardi">Mardi</button>
+                <button class="tab-btn" data-day="mercredi">Mercredi</button>
+                <button class="tab-btn" data-day="jeudi">Jeudi</button>
+                <button class="tab-btn" data-day="vendredi">Vendredi</button>
+                <button class="tab-btn" data-day="samedi">Samedi</button>
+                <button class="tab-btn" data-day="dimanche">Dimanche</button>
+            </div>
+
+            <div class="schedule-content" id="schedule-content">
+                <!-- Schedule will be loaded by JavaScript -->
+            </div>
+
+            <div class="international-relays">
+                <h3>🌍 Relais Internationaux</h3>
+                <p>Chaque jour, découvrez nos cafés partenaires à travers le monde avec des créneaux d'une heure :</p>
+                <div class="relay-grid">
+                    <div class="relay-item">
+                        <span class="relay-flag">🇮🇹</span>
+                        <span class="relay-name">Café Milano</span>
+                        <span class="relay-time">16h00-17h00</span>
+                    </div>
+                    <div class="relay-item">
+                        <span class="relay-flag">🇧🇷</span>
+                        <span class="relay-name">Café São Paulo</span>
+                        <span class="relay-time">18h00-19h00</span>
+                    </div>
+                    <div class="relay-item">
+                        <span class="relay-flag">🇺🇸</span>
+                        <span class="relay-name">Brooklyn Roasters</span>
+                        <span class="relay-time">20h00-21h00</span>
+                    </div>
+                    <div class="relay-item">
+                        <span class="relay-flag">🇯🇵</span>
+                        <span class="relay-name">Tokyo Coffee House</span>
+                        <span class="relay-time">22h00-23h00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="equipe" class="team">
+        <div class="container">
+            <h2 class="section-title">🎙️ Notre Équipe</h2>
+            <p class="section-subtitle">Les voix qui donnent vie à Radio Zigomar</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Marie Dubois">
+                        <div class="member-overlay">
+                            <span class="member-role">Directrice & Animatrice</span>
+                        </div>
+                    </div>
+                    <h3>Marie Dubois</h3>
+                    <p class="member-shows">Jazz Matinal • Café Culture</p>
+                    <p class="member-bio">Passionnée de jazz et de café depuis 15 ans, Marie donne le ton chaque matin avec sa voix chaleureuse.</p>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Pierre Leroy">
+                        <div class="member-overlay">
+                            <span class="member-role">Animateur Principal</span>
+                        </div>
+                    </div>
+                    <h3>Pierre Leroy</h3>
+                    <p class="member-shows">Café & Mélodies • Soirée Acoustique</p>
+                    <p class="member-bio">Musicien et torréfacteur, Pierre partage sa double passion à travers ses émissions uniques.</p>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Sophie Martin">
+                        <div class="member-overlay">
+                            <span class="member-role">Animatrice</span>
+                        </div>
+                    </div>
+                    <h3>Sophie Martin</h3>
+                    <p class="member-shows">Découvertes • Weekend Vibes</p>
+                    <p class="member-bio">Exploratrice musicale, Sophie déniche les pépites sonores des quatre coins du monde.</p>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.pexels.com/photos/3777931/pexels-photo-3777931.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Antoine Moreau">
+                        <div class="member-overlay">
+                            <span class="member-role">Technicien & DJ</span>
+                        </div>
+                    </div>
+                    <h3>Antoine Moreau</h3>
+                    <p class="member-shows">Mix du Soir • Coordination Technique</p>
+                    <p class="member-bio">Magicien du son, Antoine assure la qualité technique et anime les soirées électroniques.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partenaires" class="partners">
+        <div class="container">
+            <h2 class="section-title">🤝 Nos Partenaires</h2>
+            <p class="section-subtitle">Le réseau mondial des cafés Radio Zigomar</p>
+            
+            <div class="partners-content">
+                <div class="main-partner">
+                    <h3>☕ Café Zigomar</h3>
+                    <p>Notre café mère, d'où tout a commencé. Venez découvrir notre studio au cœur de l'établissement !</p>
+                    <div class="partner-info">
+                        <span>📍 123 Rue du Café, Paris</span>
+                        <span>🕒 Ouvert 7j/7</span>
+                    </div>
+                </div>
+
+                <div class="partner-network">
+                    <h3>🌍 Réseau International</h3>
+                    <div class="network-grid">
+                        <div class="network-item">
+                            <span class="network-flag">🇮🇹</span>
+                            <div class="network-info">
+                                <h4>Caffè Milano</h4>
+                                <p>Milan, Italie</p>
+                                <span class="network-time">Relais quotidien 16h-17h</span>
+                            </div>
+                        </div>
+                        <div class="network-item">
+                            <span class="network-flag">🇧🇷</span>
+                            <div class="network-info">
+                                <h4>Café Brasileiro</h4>
+                                <p>São Paulo, Brésil</p>
+                                <span class="network-time">Relais quotidien 18h-19h</span>
+                            </div>
+                        </div>
+                        <div class="network-item">
+                            <span class="network-flag">🇺🇸</span>
+                            <div class="network-info">
+                                <h4>Brooklyn Roasters</h4>
+                                <p>New York, USA</p>
+                                <span class="network-time">Relais quotidien 20h-21h</span>
+                            </div>
+                        </div>
+                        <div class="network-item">
+                            <span class="network-flag">🇯🇵</span>
+                            <div class="network-info">
+                                <h4>Tokyo Coffee House</h4>
+                                <p>Tokyo, Japon</p>
+                                <span class="network-time">Relais quotidien 22h-23h</span>
+                            </div>
+                        </div>
+                        <div class="network-item">
+                            <span class="network-flag">🇦🇺</span>
+                            <div class="network-info">
+                                <h4>Melbourne Beans</h4>
+                                <p>Melbourne, Australie</p>
+                                <span class="network-time">Relais weekend</span>
+                            </div>
+                        </div>
+                        <div class="network-item">
+                            <span class="network-flag">🇨🇦</span>
+                            <div class="network-info">
+                                <h4>Montréal Café</h4>
+                                <p>Montréal, Canada</p>
+                                <span class="network-time">Relais weekend</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">📞 Contactez Radio Zigomar</h2>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>📻 Fréquence</h3>
+                        <p><strong>89.3 FM</strong><br>Diffusion locale et streaming mondial</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>📍 Studio</h3>
+                        <p>Café Zigomar<br>123 Rue du Café<br>75001 Paris, France</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>📞 Antenne</h3>
+                        <p>+33 1 23 45 67 89<br>Ligne directe studio</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>✉️ Email</h3>
+                        <p>radio@zigomar.fm<br>programmation@zigomar.fm</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>📱 Réseaux</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/profile.php?id=61572504539153" target="_blank" class="social-link facebook">
+                                📘 Facebook
+                            </a>
+                            <a href="#" class="social-link instagram">📷 Instagram</a>
+                            <a href="#" class="social-link twitter">🐦 Twitter</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="contact-form" id="contact-form">
+                    <h3>💌 Envoyez-nous un Message</h3>
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Votre email" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="subject" name="subject" required>
+                            <option value="">Sujet de votre message</option>
+                            <option value="programmation">Suggestion de programmation</option>
+                            <option value="partenariat">Proposition de partenariat</option>
+                            <option value="technique">Problème technique</option>
+                            <option value="dedicace">Demande de dédicace</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Votre message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">📡 Envoyer le Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="radio-icon">📻</span>
+                        <div>
+                            <h3>Radio Zigomar</h3>
+                            <span class="footer-frequency">89.3 FM</span>
+                        </div>
+                    </div>
+                    <p>La voix du café depuis le cœur de Zigomar</p>
+                    <div class="footer-stats">
+                        <span>🎵 24h/24 • 7j/7</span>
+                        <span>🌍 Diffusion mondiale</span>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Programmes</h4>
+                    <ul>
+                        <li><a href="#programmes">Grille des programmes</a></li>
+                        <li><a href="#direct">Écouter en direct</a></li>
+                        <li><a href="#equipe">Nos animateurs</a></li>
+                        <li><a href="#partenaires">Relais internationaux</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>📻 89.3 FM</li>
+                        <li>📞 +33 1 23 45 67 89</li>
+                        <li>✉️ radio@zigomar.fm</li>
+                        <li>📍 Café Zigomar, Paris</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Suivez-nous</h4>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/profile.php?id=61572504539153" target="_blank" class="footer-social-link">
+                            📘 Facebook
+                        </a>
+                        <a href="#" class="footer-social-link">📷 Instagram</a>
+                        <a href="#" class="footer-social-link">🐦 Twitter</a>
+                        <a href="#" class="footer-social-link">🎵 Spotify</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Radio Zigomar 89.3 FM. Tous droits réservés.</p>
+                <p>Une production du Café Zigomar • Diffusion sous licence SACEM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

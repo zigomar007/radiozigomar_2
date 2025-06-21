@@ -1,0 +1,30 @@
+{
+  "currentTrack": {
+    "title": "Jazz Matinal",
+    "artist": "Marie Dubois",
+    "album": "Radio Zigomar Sessions",
+    "duration": "03:45",
+    "startTime": "2025-06-21T13:39:16.333Z"
+  },
+  "queue": [
+    {
+      "title": "Café Blues",
+      "artist": "Pierre Leroy",
+      "album": "Acoustic Sessions",
+      "duration": "04:12"
+    },
+    {
+      "title": "Morning Brew",
+      "artist": "Sophie Martin",
+      "album": "Coffee House Classics",
+      "duration": "03:28"
+    },
+    {
+      "title": "Espresso Dreams",
+      "artist": "Antoine Moreau",
+      "album": "Electronic Café",
+      "duration": "05:15"
+    }
+  ],
+  "history": []
+}
