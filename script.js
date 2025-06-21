@@ -102,7 +102,7 @@ function initializePlayer() {
     
     audioPlayer.addEventListener('canplay', () => {
         console.log('ًںژµ Flux prأھt أ  أھtre lu');
-        showNotification('ًں“» Radio Zigomar 89.3 FM - Flux connectأ© !', 'success');
+        showNotification('ًں“» Radio Zigomar 98.3 FM - Flux connectأ© !', 'success');
     });
     
     audioPlayer.addEventListener('playing', () => {
@@ -156,7 +156,7 @@ function togglePlay() {
     } else {
         // Demander la permission pour l'autoplay si nأ©cessaire
         audioPlayer.play().then(() => {
-            showNotification('ًںژµ Radio Zigomar 89.3 FM - En direct !', 'success');
+            showNotification('ًںژµ Radio Zigomar 98.3 FM - En direct !', 'success');
         }).catch(error => {
             console.error('Erreur lecture:', error);
             if (error.name === 'NotAllowedError') {
@@ -284,82 +284,82 @@ function startRealTimeUpdates() {
 // Schedule data (conservأ© pour le mode autonome)
 const scheduleData = {
     lundi: [
-        { time: '06:00', show: 'Rأ©veil Dali', host: 'Marie Dubois', description: 'Dأ©marrez la journأ©e en douceur avec du jazz et des infos locales' },
-        { time: '09:00', show: 'Cafأ© Zigomar', host: 'Pierre Leroy', description: 'Dأ©couvertes musicales et histoires de grains' },
-        { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
+        { time: '06:00', show: 'Réveil Dali', host: 'Marie Dubois', description: 'Dأ©marrez la journأ©e en douceur avec du jazz et des infos locales' },
+        { time: '09:00', show: 'Café Zigomar', host: 'Pierre Leroy', description: 'Dأ©couvertes musicales et histoires de grains' },
+        { time: '12:00', show: 'Pause Déjeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
         { time: '14:00', show: 'Relais Radio wave 103 FM', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
 		{ time: '15:00', show: 'L heure du Raî', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
-        { time: '16:00', show: 'نوار عشية', host: 'Cafأ© Milano', description: 'Direct depuis notre partenaire italien' },
+        { time: '16:00', show: 'نوار عشية', host: 'Café Milano', description: 'Direct depuis notre partenaire italien' },
         { time: '17:00', show: 'Relais Radio K_Rose', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
         { time: '19:00', show: 'Relais Radio Nostaljinin', host: 'Pierre Leroy', description: 'Guitares et voix, intimitأ© garantie' },
-        { time: '21:00', show: 'Mix du Soir', host: 'Antoine Moreau', description: 'أ‰lectronique et ambiances nocturnes' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Musique douce pour la nuit' },
+        { time: '21:00', show: 'Mix du Soir', host: 'Antoine Moreau', description: 'Électronique et ambiances nocturnes' },
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Musique douce pour la nuit' },
 		{ time: '20:00', show: 'Nuit Fernando-Italiano', host: 'Programmation automatique', description: 'Musique douce pour la nuit' }
     ],
     mardi: [
-        { time: '06:00', show: 'Rأ©veil Cafأ©', host: 'Pierre Leroy', description: 'Dأ©marrez la journأ©e avec أ©nergie' },
+        { time: '06:00', show: 'Réveil Café', host: 'Pierre Leroy', description: 'Dأ©marrez la journأ©e avec أ©nergie' },
         { time: '09:00', show: 'Dأ©couvertes', host: 'Sophie Martin', description: 'Nouveautأ©s et talents أ©mergents' },
-        { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Marie Dubois', description: 'Dأ©tente musicale' },
-        { time: '14:00', show: 'Cafأ© World', host: 'Pierre Leroy', description: 'Musiques du monde et cafأ©' },
-        { time: '16:00', show: 'Relais Sأ£o Paulo', host: 'Cafأ© Brasileiro', description: 'Saveurs brأ©siliennes en direct' },
-        { time: '17:00', show: 'Bossa & Cafأ©', host: 'Sophie Martin', description: 'Douceur brأ©silienne' },
-        { time: '19:00', show: 'Rock Cafأ©', host: 'Antoine Moreau', description: 'Rock et cafأ©, le mأ©lange parfait' },
-        { time: '21:00', show: 'أ‰lectro Lounge', host: 'Antoine Moreau', description: 'أ‰lectronique chillأ©e' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Ambiances nocturnes' }
+        { time: '12:00', show: 'Pause Déjeuner', host: 'Marie Dubois', description: 'Dأ©tente musicale' },
+        { time: '14:00', show: 'Café World', host: 'Pierre Leroy', description: 'Musiques du monde et Café' },
+        { time: '16:00', show: 'Relais Sأ£o Paulo', host: 'Café Brasileiro', description: 'Saveurs brأ©siliennes en direct' },
+        { time: '17:00', show: 'Bossa & Café', host: 'Sophie Martin', description: 'Douceur brأ©silienne' },
+        { time: '19:00', show: 'Rock Café', host: 'Antoine Moreau', description: 'Rock et Café, le mأ©lange parfait' },
+        { time: '21:00', show: 'أ‰lectro Lounge', host: 'Antoine Moreau', description: 'Électronique chillée' },
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Ambiances nocturnes' }
     ],
     mercredi: [
-        { time: '06:00', show: 'Rأ©veil Cafأ©', host: 'Sophie Martin', description: 'Mercredi en musique' },
-        { time: '09:00', show: 'Cafأ© Vintage', host: 'Marie Dubois', description: 'Classiques intemporels' },
-        { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Pierre Leroy', description: 'Musique de midi' },
-        { time: '14:00', show: 'Folk & Cafأ©', host: 'Marie Dubois', description: 'Authenticitأ© et simplicitأ©' },
+        { time: '06:00', show: 'Réveil Café', host: 'Sophie Martin', description: 'Mercredi en musique' },
+        { time: '09:00', show: 'Café Vintage', host: 'Marie Dubois', description: 'Classiques intemporels' },
+        { time: '12:00', show: 'Pause Déjeuner', host: 'Pierre Leroy', description: 'Musique de midi' },
+        { time: '14:00', show: 'Folk & Café', host: 'Marie Dubois', description: 'Authenticitأ© et simplicitأ©' },
         { time: '16:00', show: 'Relais Brooklyn', host: 'Brooklyn Roasters', description: 'New York en direct' },
-        { time: '17:00', show: 'Blues Cafأ©', host: 'Pierre Leroy', description: 'Le blues dans tous ses أ©tats' },
+        { time: '17:00', show: 'Blues Café', host: 'Pierre Leroy', description: 'Le blues dans tous ses أ©tats' },
         { time: '19:00', show: 'Indie Session', host: 'Sophie Martin', description: 'Indأ©pendants et crأ©atifs' },
-        { time: '21:00', show: 'Deep House', host: 'Antoine Moreau', description: 'House profonde et cafأ©' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Nuit en douceur' }
+        { time: '21:00', show: 'Deep House', host: 'Antoine Moreau', description: 'House profonde et Café' },
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit en douceur' }
     ],
     jeudi: [
-        { time: '06:00', show: 'Rأ©veil Cafأ©', host: 'Antoine Moreau', description: 'Jeudi أ©lectronique' },
-        { time: '09:00', show: 'Reggae Cafأ©', host: 'Pierre Leroy', description: 'Vibrations jamaأ¯caines' },
-        { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Sophie Martin', description: 'Pause musicale' },
-        { time: '14:00', show: 'Cafأ© Latino', host: 'Sophie Martin', description: 'Rythmes latins' },
+        { time: '06:00', show: 'Réveil Café', host: 'Antoine Moreau', description: 'Jeudi أ©lectronique' },
+        { time: '09:00', show: 'Reggae Café', host: 'Pierre Leroy', description: 'Vibrations jamaأ¯caines' },
+        { time: '12:00', show: 'Pause Déjeuner', host: 'Sophie Martin', description: 'Pause musicale' },
+        { time: '14:00', show: 'Café Latino', host: 'Sophie Martin', description: 'Rythmes latins' },
         { time: '16:00', show: 'Relais Tokyo', host: 'Tokyo Coffee House', description: 'Japon en direct' },
-        { time: '17:00', show: 'Ambient Cafأ©', host: 'Marie Dubois', description: 'Ambiances et textures' },
-        { time: '19:00', show: 'Funk Session', host: 'Antoine Moreau', description: 'Groove et cafأ©' },
-        { time: '21:00', show: 'Techno Cafأ©', host: 'Antoine Moreau', description: 'Techno et espresso' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Nuit أ©lectronique' }
+        { time: '17:00', show: 'Ambient Café', host: 'Marie Dubois', description: 'Ambiances et textures' },
+        { time: '19:00', show: 'Funk Session', host: 'Antoine Moreau', description: 'Groove et Café' },
+        { time: '21:00', show: 'Techno Café', host: 'Antoine Moreau', description: 'Techno et espresso' },
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit أ©lectronique' }
     ],
     vendredi: [
-        { time: '06:00', show: 'Rأ©veil Cafأ©', host: 'Marie Dubois', description: 'Vendredi jazz' },
-        { time: '09:00', show: 'Soul Cafأ©', host: 'Pierre Leroy', description: 'Soul et cafأ©' },
-        { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Antoine Moreau', description: 'Pause du vendredi' },
-        { time: '14:00', show: 'Hip-Hop Cafأ©', host: 'Antoine Moreau', description: 'Beats et cafأ©' },
+        { time: '06:00', show: 'Réveil Café', host: 'Marie Dubois', description: 'Vendredi jazz' },
+        { time: '09:00', show: 'Soul Café', host: 'Pierre Leroy', description: 'Soul et Café' },
+        { time: '12:00', show: 'Pause Déjeuner', host: 'Antoine Moreau', description: 'Pause du vendredi' },
+        { time: '14:00', show: 'Hip-Hop Café', host: 'Antoine Moreau', description: 'Beats et Café' },
         { time: '16:00', show: 'Relais Melbourne', host: 'Melbourne Beans', description: 'Australie en direct' },
         { time: '17:00', show: 'R&B Session', host: 'Sophie Martin', description: 'Rhythm and Blues' },
         { time: '19:00', show: 'Weekend Warm-up', host: 'Tous les animateurs', description: 'Prأ©paration du weekend' },
         { time: '21:00', show: 'Party Mix', host: 'Antoine Moreau', description: 'Mix festif' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Nuit de fأھte' }
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit de fأھte' }
     ],
     samedi: [
-        { time: '08:00', show: 'Weekend Cafأ©', host: 'Sophie Martin', description: 'Samedi dأ©tendu' },
-        { time: '10:00', show: 'Cafأ© Famille', host: 'Marie Dubois', description: 'Musique pour tous' },
+        { time: '08:00', show: 'Weekend Café', host: 'Sophie Martin', description: 'Samedi dأ©tendu' },
+        { time: '10:00', show: 'Café Famille', host: 'Marie Dubois', description: 'Musique pour tous' },
         { time: '12:00', show: 'Brunch Musical', host: 'Pierre Leroy', description: 'Accompagnement brunch' },
-        { time: '14:00', show: 'Cafأ© Dأ©couverte', host: 'Sophie Martin', description: 'Nouveaux talents' },
-        { time: '16:00', show: 'Relais Montrأ©al', host: 'Montrأ©al Cafأ©', description: 'Canada en direct' },
+        { time: '14:00', show: 'Café Dأ©couverte', host: 'Sophie Martin', description: 'Nouveaux talents' },
+        { time: '16:00', show: 'Relais Montrأ©al', host: 'Montrأ©al Café', description: 'Canada en direct' },
         { time: '17:00', show: 'Classic Rock', host: 'Pierre Leroy', description: 'Grands classiques rock' },
         { time: '19:00', show: 'Saturday Night', host: 'Antoine Moreau', description: 'Soirأ©e du samedi' },
         { time: '21:00', show: 'Dance Floor', host: 'Antoine Moreau', description: 'Pour danser' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Nuit dansante' }
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit dansante' }
     ],
     dimanche: [
-        { time: '09:00', show: 'Dimanche Cafأ©', host: 'Marie Dubois', description: 'Dimanche en douceur' },
-        { time: '11:00', show: 'Gospel & Cafأ©', host: 'Pierre Leroy', description: 'Spiritualitأ© musicale' },
-        { time: '13:00', show: 'Cafأ© Classique', host: 'Marie Dubois', description: 'Musique classique' },
+        { time: '09:00', show: 'Dimanche Café', host: 'Marie Dubois', description: 'Dimanche en douceur' },
+        { time: '11:00', show: 'Gospel & Café', host: 'Pierre Leroy', description: 'Spiritualitأ© musicale' },
+        { time: '13:00', show: 'Café Classique', host: 'Marie Dubois', description: 'Musique classique' },
         { time: '15:00', show: 'World Music', host: 'Sophie Martin', description: 'Tour du monde musical' },
-        { time: '17:00', show: 'Cafأ© Nostalgie', host: 'Pierre Leroy', description: 'Souvenirs musicaux' },
+        { time: '17:00', show: 'Café Nostalgie', host: 'Pierre Leroy', description: 'Souvenirs musicaux' },
         { time: '19:00', show: 'Sunday Session', host: 'Tous les animateurs', description: 'Session collective' },
         { time: '21:00', show: 'Chill Out', host: 'Antoine Moreau', description: 'Dأ©tente dominicale' },
-        { time: '23:00', show: 'Nuit Cafأ©', host: 'Programmation automatique', description: 'Nuit paisible' }
+        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit paisible' }
     ]
 };
 
@@ -406,33 +406,33 @@ function showSchedule(day) {
 function updateCurrentShow() {
     const shows = [
         {
-            title: 'Rأ©veil Dali',
+            title: 'Réveil Dali',
             host: 'Marie Dubois',
-            description: 'Dأ©marrez votre journأ©e avec les plus belles mأ©lodies jazz, accompagnأ©es des meilleurs cafأ©s du monde.',
+            description: 'Dأ©marrez votre journأ©e avec les plus belles mأ©lodies jazz, accompagnأ©es des meilleurs cafés du monde.',
             time: '06:00 - 09:00'
         },
         {
             title: 'Relais Radio wave 103 FM',
             host: 'Sophie Martin',
-            description: 'Un voyage musical أ  travers les genres, accompagnأ© des meilleurs cafأ©s du monde. Dأ©couvertes musicales et histoires de grains.',
+            description: 'Un voyage musical أ  travers les genres, accompagnأ© des meilleurs cafés du monde. Dأ©couvertes musicales et histoires de grains.',
             time: '14:00 - 15:00'
         },
 		{
             title: 'Relais Radio K_Rose',
             host: 'Sophie Martin',
-            description: 'Un voyage musical أ  travers les genres, accompagnأ© des meilleurs cafأ©s du monde. Dأ©couvertes musicales et histoires de grains.',
+            description: 'Un voyage musical أ  travers les genres, accompagnأ© des meilleurs cafés du monde. Dأ©couvertes musicales et histoires de grains.',
             time: '17:00 - 18:00'
         },
         {
             title: 'Soirأ©e Acoustique',
             host: 'Pierre Leroy',
-            description: 'Guitares et voix dans l\'intimitأ© du studio. Musique acoustique et cafأ© artisanal.',
+            description: 'Guitares et voix dans l\'intimitأ© du studio. Musique acoustique et Café artisanal.',
             time: '19:00 - 21:00'
         },
         {
             title: 'Mix du Soir',
             host: 'Antoine Moreau',
-            description: 'أ‰lectronique et ambiances nocturnes pour accompagner vos soirأ©es cafأ©.',
+            description: 'Électronique et ambiances nocturnes pour accompagner vos soirأ©es Café.',
             time: '21:00 - 23:00'
         }
     ];
@@ -451,9 +451,9 @@ function updateCurrentShow() {
         currentShow = shows[3];
     } else {
         currentShow = {
-            title: 'Nuit Cafأ©',
+            title: 'Nuit Café',
             host: 'Programmation Automatique',
-            description: 'Musique douce et ambiances nocturnes pour accompagner vos nuits cafأ©.',
+            description: 'Musique douce et ambiances nocturnes pour accompagner vos nuits Café.',
             time: '23:00 - 06:00'
         };
     }
@@ -698,7 +698,7 @@ document.addEventListener('keydown', function(e) {
 
 // Add social media sharing functionality
 function shareOnSocial(platform, text, url) {
-    const shareText = encodeURIComponent(text || 'أ‰coutez Radio Zigomar 89.3 FM - La voix du cafأ© !');
+    const shareText = encodeURIComponent(text || 'أ‰coutez Radio Zigomar 98.3 FM - La voix du Café !');
     const shareUrl = encodeURIComponent(url || window.location.href);
     
     let shareLink = '';
@@ -722,7 +722,7 @@ function shareOnSocial(platform, text, url) {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('ًںژµ Radio Zigomar 89.3 FM - Site web chargأ© avec succأ¨s !');
+    console.log('ًںژµ Radio Zigomar 98.3 FM - Site web chargأ© avec succأ¨s !');
     console.log('ًں“» Flux audio: https://stream.zeno.fm/ljjignydycktv');
     
     // Add some easter eggs
