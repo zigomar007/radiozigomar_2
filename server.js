@@ -379,11 +379,11 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`
 🎙️ ========================================
-   📻 RADIO ZIGOMAR 89.3 FM - SERVEUR ACTIF
+   📻 RADIO ZIGOMAR 98.3 FM - SERVEUR ACTIF
 🎙️ ========================================
 
-🌐 Site web: http://localhost:${PORT}
-📡 API: http://localhost:${PORT}/api
+🌐 Site web: http://localhost:3000/admin.html
+📡 API: http://localhost:3000/api/*
 📊 Stats: http://localhost:${PORT}/api/stats
 
 🎵 Fonctionnalités actives:
