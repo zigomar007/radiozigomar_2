@@ -132,7 +132,7 @@ const scheduleData = {
         { time: '09:00', show: 'Cafأ© Zigomar', host: 'Pierre Leroy', description: 'Dأ©couvertes musicales et histoires de grains' },
         { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
         { time: '14:00', show: 'Relais Radio wave 103 FM', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
-		{ time: '15:00', show: 'L'heure du Raî', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
+	{ time: '15:00', show: 'L heure du Raî', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
         { time: '16:00', show: 'نوار عشية', host: 'Cafأ© Milano', description: 'Direct depuis notre partenaire italien' },
         { time: '17:00', show: 'Relais Radio K_Rose', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
         { time: '19:00', show: 'Relais Radio Nostaljinin', host: 'Pierre Leroy', description: 'Guitares et voix, intimitأ© garantie' },
