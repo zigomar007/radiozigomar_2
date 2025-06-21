@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize components
     initializePlayer();
     initializeSchedule();
-    updateCurrentShow();
+    updateCurrentShow(); // Initial call
     initializeListenerCounter();
     connectToAPI();
 
@@ -70,9 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.team-member, .relay-item, .network-item, .contact-item').forEach(el => {
         observer.observe(el);
     });
+
+    // Update schedule every minute
+    setInterval(updateCurrentShow, 60000);
 });
 
-// ًںژµ LECTEUR AUDIO AVEC VRAI FLUX
+//  LECTEUR AUDIO AVEC VRAI FLUX
 let audioPlayer = null;
 let isPlaying = false;
 let currentVolume = 70;
@@ -87,56 +90,56 @@ function initializePlayer() {
     const playBtn = document.getElementById('play-btn');
     const volumeSlider = document.getElementById('volume-slider');
     
-    // Crأ©er l'أ©lأ©ment audio
+    // Crer l'lment audio
     audioPlayer = new Audio();
     audioPlayer.crossOrigin = 'anonymous';
     audioPlayer.preload = 'none';
     
-    // Essayer les diffأ©rentes URLs de flux
+    // Essayer les diffrentes URLs de flux
     audioPlayer.src = STREAM_URLS[0];
     
-    // أ‰vأ©nements audio
+    // ‰vnements audio
     audioPlayer.addEventListener('loadstart', () => {
-        console.log('ًںژµ Chargement du flux Radio Zigomar...');
+        console.log(' Chargement du flux Radio Zigomar...');
     });
     
     audioPlayer.addEventListener('canplay', () => {
-        console.log('ًںژµ Flux prأھt أ  أھtre lu');
-        showNotification('ًں“» Radio Zigomar 98.3 FM - Flux connectأ© !', 'success');
+        console.log(' Flux prt  tre lu');
+        showNotification('“ Radio Zigomar 98.3 FM - Flux connect !', 'success');
     });
     
     audioPlayer.addEventListener('playing', () => {
-        console.log('ًںژµ Lecture en cours');
+        console.log(' Lecture en cours');
         isPlaying = true;
         updatePlayerUI();
     });
     
     audioPlayer.addEventListener('pause', () => {
-        console.log('âڈ¸ï¸ڈ Lecture en pause');
+        console.log(' Lecture en pause');
         isPlaying = false;
         updatePlayerUI();
     });
     
     audioPlayer.addEventListener('error', (e) => {
-        console.error('â‌Œ Erreur audio:', e);
+        console.error(' Erreur audio:', e);
         // Essayer l'URL alternative
         if (audioPlayer.src === STREAM_URLS[0]) {
-            console.log('ًں”„ Tentative avec URL alternative...');
+            console.log('”„ Tentative avec URL alternative...');
             audioPlayer.src = STREAM_URLS[1];
             if (isPlaying) {
                 audioPlayer.play().catch(console.error);
             }
         } else {
-            showNotification('âڑ ï¸ڈ Problأ¨me de connexion au flux. Veuillez rأ©essayer.', 'error');
+            showNotification(' Problme de connexion au flux. Veuillez ressayer.', 'error');
         }
     });
     
     audioPlayer.addEventListener('stalled', () => {
-        console.log('âڈ³ Flux en attente...');
-        showNotification('âڈ³ Connexion au flux en cours...', 'info');
+        console.log(' Flux en attente...');
+        showNotification(' Connexion au flux en cours...', 'info');
     });
     
-    // Contrأ´les
+    // Contrles
     playBtn.addEventListener('click', togglePlay);
     volumeSlider.addEventListener('input', adjustVolume);
     
@@ -152,17 +155,17 @@ function togglePlay() {
     
     if (isPlaying) {
         audioPlayer.pause();
-        showNotification('âڈ¸ï¸ڈ Radio Zigomar - Lecture en pause', 'info');
+        showNotification(' Radio Zigomar - Lecture en pause', 'info');
     } else {
-        // Demander la permission pour l'autoplay si nأ©cessaire
+        // Demander la permission pour l'autoplay si ncessaire
         audioPlayer.play().then(() => {
-            showNotification('ًںژµ Radio Zigomar 98.3 FM - En direct !', 'success');
+            showNotification(' Radio Zigomar 98.3 FM - En direct !', 'success');
         }).catch(error => {
             console.error('Erreur lecture:', error);
             if (error.name === 'NotAllowedError') {
-                showNotification('ًں”ٹ Cliquez pour autoriser la lecture audio', 'warning');
+                showNotification('” Cliquez pour autoriser la lecture audio', 'warning');
             } else {
-                showNotification('âڑ ï¸ڈ Erreur de connexion au flux', 'error');
+                showNotification(' Erreur de connexion au flux', 'error');
             }
         });
     }
@@ -205,7 +208,7 @@ function animateVisualizer() {
     }, 200);
 }
 
-// ًںŒگ CONNEXION API
+//  CONNEXION API
 let apiConnected = false;
 
 async function connectToAPI() {
@@ -213,13 +216,13 @@ async function connectToAPI() {
         const response = await fetch('/api/stats');
         if (response.ok) {
             apiConnected = true;
-            console.log('ًںŒگ API connectأ©e');
+            console.log(' API connecte');
             loadCurrentShow();
             loadPlaylist();
             startRealTimeUpdates();
         }
     } catch (error) {
-        console.log('ًں“، Mode autonome (pas de serveur Node.js)');
+        console.log('“ Mode autonome (pas de serveur Node.js)');
         apiConnected = false;
     }
 }
@@ -236,11 +239,11 @@ async function loadCurrentShow() {
         document.getElementById('current-description').textContent = show.description;
         document.getElementById('listeners-count').textContent = show.listeners;
         
-        // Mettre أ  jour le lecteur
+        // Mettre  jour le lecteur
         document.querySelector('.track-title').textContent = show.title;
         document.querySelector('.track-artist').textContent = 'avec ' + show.host;
     } catch (error) {
-        console.error('Erreur chargement أ©mission:', error);
+        console.error('Erreur chargement mission:', error);
     }
 }
 
@@ -263,7 +266,7 @@ async function loadPlaylist() {
 function startRealTimeUpdates() {
     if (!apiConnected) return;
     
-    // Mettre أ  jour les stats toutes les 30 secondes
+    // Mettre  jour les stats toutes les 30 secondes
     setInterval(async () => {
         try {
             const response = await fetch('/api/stats');
@@ -276,90 +279,92 @@ function startRealTimeUpdates() {
                 document.querySelector('.track-artist').textContent = stats.currentTrack.artist;
             }
         } catch (error) {
-            console.error('Erreur mise أ  jour stats:', error);
+            console.error('Erreur mise  jour stats:', error);
         }
     }, 30000);
 }
 
-// Schedule data (conservأ© pour le mode autonome)
+// Schedule data (conserv pour le mode autonome)
 const scheduleData = {
     lundi: [
-        { time: '06:00', show: 'Réveil Dali', host: 'Marie Dubois', description: 'Dأ©marrez la journأ©e en douceur avec du jazz et des infos locales' },
-        { time: '09:00', show: 'Café Zigomar', host: 'Pierre Leroy', description: 'Dأ©couvertes musicales et histoires de grains' },
-        { time: '12:00', show: 'Pause Déjeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
-        { time: '14:00', show: 'Relais Radio wave 103 FM', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
-		{ time: '15:00', show: 'L heure du Raî', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
-        { time: '16:00', show: 'نوار عشية', host: 'Café Milano', description: 'Direct depuis notre partenaire italien' },
-        { time: '17:00', show: 'Relais Radio K_Rose', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
-        { time: '19:00', show: 'Relais Radio Nostaljinin', host: 'Pierre Leroy', description: 'Guitares et voix, intimitأ© garantie' },
-        { time: '21:00', show: 'Mix du Soir', host: 'Antoine Moreau', description: 'Électronique et ambiances nocturnes' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Musique douce pour la nuit' },
-		{ time: '20:00', show: 'Nuit Fernando-Italiano', host: 'Programmation automatique', description: 'Musique douce pour la nuit' }
+        { time: '06:00', show: 'Rveil Dali', host: 'Marie Dubois', description: 'Dmarrez la journe en douceur avec du jazz et des infos locales' },
+        { time: '09:00', show: 'Caf Zigomar', host: 'Pierre Leroy', description: 'Dcouvertes musicales et histoires de grains' },
+        { time: '12:00', show: 'Pause Djeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
+        { time: '14:00', show: 'Relais Radio wave 103 FM', host: 'Sophie Martin', description: 'Un voyage musical  travers les genres' },
+        { time: '15:00', show: 'L heure du Ra', host: 'Sophie Martin', description: 'Un voyage musical  travers les genres' },
+        { time: '16:00', show: ' ', host: 'Caf Milano', description: 'Direct depuis notre partenaire italien' },
+        { time: '17:00', show: 'Relais Radio Nostaljinin', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
+        { time: '19:00', show: 'Relais Radio Radio K_Rose', host: 'Pierre Leroy', description: 'Guitares et voix, intimit garantie' },
+        { time: '20:00', show: 'Mix du Soir', host: 'Antoine Moreau', description: 'lectronique et ambiances nocturnes' },
+        { time: '21:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Musique douce pour la nuit' },
+        { time: '23:00', show: 'Nuit Fernando-Italiano', host: 'Programmation automatique', description: 'Musique douce pour la nuit' }
     ],
     mardi: [
-        { time: '06:00', show: 'Réveil Café', host: 'Pierre Leroy', description: 'Dأ©marrez la journأ©e avec أ©nergie' },
-        { time: '09:00', show: 'Dأ©couvertes', host: 'Sophie Martin', description: 'Nouveautأ©s et talents أ©mergents' },
-        { time: '12:00', show: 'Pause Déjeuner', host: 'Marie Dubois', description: 'Dأ©tente musicale' },
-        { time: '14:00', show: 'Café World', host: 'Pierre Leroy', description: 'Musiques du monde et Café' },
-        { time: '16:00', show: 'Relais Sأ£o Paulo', host: 'Café Brasileiro', description: 'Saveurs brأ©siliennes en direct' },
-        { time: '17:00', show: 'Bossa & Café', host: 'Sophie Martin', description: 'Douceur brأ©silienne' },
-        { time: '19:00', show: 'Rock Café', host: 'Antoine Moreau', description: 'Rock et Café, le mأ©lange parfait' },
-        { time: '21:00', show: 'أ‰lectro Lounge', host: 'Antoine Moreau', description: 'Électronique chillée' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Ambiances nocturnes' }
+        { time: '06:00', show: 'Rveil Caf', host: 'Pierre Leroy', description: 'Dmarrez la journe avec nergie' },
+        { time: '09:00', show: 'Dcouvertes', host: 'Sophie Martin', description: 'Nouveauts et talents mergents' },
+        { time: '12:00', show: 'Pause Djeuner', host: 'Marie Dubois', description: 'Dtente musicale' },
+        { time: '14:00', show: 'Caf World', host: 'Pierre Leroy', description: 'Musiques du monde et Caf' },
+        { time: '16:00', show: 'Relais So Paulo', host: 'Caf Brasileiro', description: 'Saveurs brsiliennes en direct' },
+        { time: '17:00', show: 'Bossa & Caf', host: 'Sophie Martin', description: 'Douceur brsilienne' },
+        { time: '19:00', show: 'Rock Caf', host: 'Antoine Moreau', description: 'Rock et Caf, le mlange parfait' },
+        { time: '21:00', show: '‰lectro Lounge', host: 'Antoine Moreau', description: 'lectronique chille' },
+        { time: '23:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Ambiances nocturnes' }
     ],
     mercredi: [
-        { time: '06:00', show: 'Réveil Café', host: 'Sophie Martin', description: 'Mercredi en musique' },
-        { time: '09:00', show: 'Café Vintage', host: 'Marie Dubois', description: 'Classiques intemporels' },
-        { time: '12:00', show: 'Pause Déjeuner', host: 'Pierre Leroy', description: 'Musique de midi' },
-        { time: '14:00', show: 'Folk & Café', host: 'Marie Dubois', description: 'Authenticitأ© et simplicitأ©' },
+        { time: '06:00', show: 'Rveil Caf', host: 'Sophie Martin', description: 'Mercredi en musique' },
+        { time: '09:00', show: 'Caf Vintage', host: 'Marie Dubois', description: 'Classiques intemporels' },
+        { time: '12:00', show: 'Pause Djeuner', host: 'Pierre Leroy', description: 'Musique de midi' },
+        { time: '14:00', show: 'Folk & Caf', host: 'Marie Dubois', description: 'Authenticit et simplicit' },
         { time: '16:00', show: 'Relais Brooklyn', host: 'Brooklyn Roasters', description: 'New York en direct' },
-        { time: '17:00', show: 'Blues Café', host: 'Pierre Leroy', description: 'Le blues dans tous ses أ©tats' },
-        { time: '19:00', show: 'Indie Session', host: 'Sophie Martin', description: 'Indأ©pendants et crأ©atifs' },
-        { time: '21:00', show: 'Deep House', host: 'Antoine Moreau', description: 'House profonde et Café' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit en douceur' }
+        { time: '17:00', show: 'Blues Caf', host: 'Pierre Leroy', description: 'Le blues dans tous ses tats' },
+        { time: '19:00', show: 'Indie Session', host: 'Sophie Martin', description: 'Indpendants et cratifs' },
+        { time: '21:00', show: 'Deep House', host: 'Antoine Moreau', description: 'House profonde et Caf' },
+        { time: '23:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Nuit en douceur' }
     ],
     jeudi: [
-        { time: '06:00', show: 'Réveil Café', host: 'Antoine Moreau', description: 'Jeudi أ©lectronique' },
-        { time: '09:00', show: 'Reggae Café', host: 'Pierre Leroy', description: 'Vibrations jamaأ¯caines' },
-        { time: '12:00', show: 'Pause Déjeuner', host: 'Sophie Martin', description: 'Pause musicale' },
-        { time: '14:00', show: 'Café Latino', host: 'Sophie Martin', description: 'Rythmes latins' },
+        { time: '06:00', show: 'Rveil Caf', host: 'Antoine Moreau', description: 'Jeudi lectronique' },
+        { time: '09:00', show: 'Reggae Caf', host: 'Pierre Leroy', description: 'Vibrations jamacaines' },
+        { time: '12:00', show: 'Pause Djeuner', host: 'Sophie Martin', description: 'Pause musicale' },
+        { time: '14:00', show: 'Caf Latino', host: 'Sophie Martin', description: 'Rythmes latins' },
         { time: '16:00', show: 'Relais Tokyo', host: 'Tokyo Coffee House', description: 'Japon en direct' },
-        { time: '17:00', show: 'Ambient Café', host: 'Marie Dubois', description: 'Ambiances et textures' },
-        { time: '19:00', show: 'Funk Session', host: 'Antoine Moreau', description: 'Groove et Café' },
-        { time: '21:00', show: 'Techno Café', host: 'Antoine Moreau', description: 'Techno et espresso' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit أ©lectronique' }
+        { time: '17:00', show: 'Ambient Caf', host: 'Marie Dubois', description: 'Ambiances et textures' },
+        { time: '19:00', show: 'Funk Session', host: 'Antoine Moreau', description: 'Groove et Caf' },
+        { time: '21:00', show: 'Techno Caf', host: 'Antoine Moreau', description: 'Techno et espresso' },
+        { time: '23:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Nuit lectronique' }
     ],
     vendredi: [
-        { time: '06:00', show: 'Réveil Café', host: 'Marie Dubois', description: 'Vendredi jazz' },
-        { time: '09:00', show: 'Soul Café', host: 'Pierre Leroy', description: 'Soul et Café' },
-        { time: '12:00', show: 'Pause Déjeuner', host: 'Antoine Moreau', description: 'Pause du vendredi' },
-        { time: '14:00', show: 'Hip-Hop Café', host: 'Antoine Moreau', description: 'Beats et Café' },
+        { time: '06:00', show: 'Rveil Caf', host: 'Marie Dubois', description: 'Vendredi jazz' },
+        { time: '09:00', show: 'Soul Caf', host: 'Pierre Leroy', description: 'Soul et Caf' },
+        { time: '12:00', show: 'Pause Djeuner', host: 'Antoine Moreau', description: 'Pause du vendredi' },
+        { time: '14:00', show: 'Hip-Hop Caf', host: 'Antoine Moreau', description: 'Beats et Caf' },
         { time: '16:00', show: 'Relais Melbourne', host: 'Melbourne Beans', description: 'Australie en direct' },
         { time: '17:00', show: 'R&B Session', host: 'Sophie Martin', description: 'Rhythm and Blues' },
-        { time: '19:00', show: 'Weekend Warm-up', host: 'Tous les animateurs', description: 'Prأ©paration du weekend' },
+        { time: '19:00', show: 'Weekend Warm-up', host: 'Tous les animateurs', description: 'Prparation du weekend' },
         { time: '21:00', show: 'Party Mix', host: 'Antoine Moreau', description: 'Mix festif' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit de fأھte' }
+        { time: '23:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Nuit de fte' }
     ],
     samedi: [
-        { time: '08:00', show: 'Weekend Café', host: 'Sophie Martin', description: 'Samedi dأ©tendu' },
-        { time: '10:00', show: 'Café Famille', host: 'Marie Dubois', description: 'Musique pour tous' },
-        { time: '12:00', show: 'Brunch Musical', host: 'Pierre Leroy', description: 'Accompagnement brunch' },
-        { time: '14:00', show: 'Café Dأ©couverte', host: 'Sophie Martin', description: 'Nouveaux talents' },
-        { time: '16:00', show: 'Relais Montrأ©al', host: 'Montrأ©al Café', description: 'Canada en direct' },
-        { time: '17:00', show: 'Classic Rock', host: 'Pierre Leroy', description: 'Grands classiques rock' },
-        { time: '19:00', show: 'Saturday Night', host: 'Antoine Moreau', description: 'Soirأ©e du samedi' },
-        { time: '21:00', show: 'Dance Floor', host: 'Antoine Moreau', description: 'Pour danser' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit dansante' }
+        { time: '06:00', show: 'Rveil Dali', host: 'Marie Dubois', description: 'Dmarrez la journe en douceur avec du jazz et des infos locales' },
+        { time: '09:00', show: 'Caf Zigomar', host: 'Pierre Leroy', description: 'Dcouvertes musicales et histoires de grains' },
+        { time: '12:00', show: 'Pause Djeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
+        { time: '14:00', show: 'Relais Radio wave 103 FM', host: 'Sophie Martin', description: 'Un voyage musical  travers les genres' },
+        { time: '15:00', show: 'L heure du Ra', host: 'Sophie Martin', description: 'Un voyage musical  travers les genres' },
+        { time: '16:00', show: ' ', host: 'Caf Milano', description: 'Direct depuis notre partenaire italien' },
+        { time: '17:00', show: 'Relais Radio Nostaljinin', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
+        { time: '19:00', show: 'Relais Radio Radio K_Rose', host: 'Pierre Leroy', description: 'Guitares et voix, intimit garantie' },
+        { time: '20:00', show: 'Mix du Soir', host: 'Antoine Moreau', description: 'lectronique et ambiances nocturnes' },
+        { time: '21:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Musique douce pour la nuit' },
+        { time: '23:00', show: 'Nuit Fernando-Italiano', host: 'Programmation automatique', description: 'Musique douce pour la nuit' }
     ],
     dimanche: [
-        { time: '09:00', show: 'Dimanche Café', host: 'Marie Dubois', description: 'Dimanche en douceur' },
-        { time: '11:00', show: 'Gospel & Café', host: 'Pierre Leroy', description: 'Spiritualitأ© musicale' },
-        { time: '13:00', show: 'Café Classique', host: 'Marie Dubois', description: 'Musique classique' },
+        { time: '09:00', show: 'Dimanche Caf', host: 'Marie Dubois', description: 'Dimanche en douceur' },
+        { time: '11:00', show: 'Gospel & Caf', host: 'Pierre Leroy', description: 'Spiritualit musicale' },
+        { time: '13:00', show: 'Caf Classique', host: 'Marie Dubois', description: 'Musique classique' },
         { time: '15:00', show: 'World Music', host: 'Sophie Martin', description: 'Tour du monde musical' },
-        { time: '17:00', show: 'Café Nostalgie', host: 'Pierre Leroy', description: 'Souvenirs musicaux' },
+        { time: '17:00', show: 'Caf Nostalgie', host: 'Pierre Leroy', description: 'Souvenirs musicaux' },
         { time: '19:00', show: 'Sunday Session', host: 'Tous les animateurs', description: 'Session collective' },
-        { time: '21:00', show: 'Chill Out', host: 'Antoine Moreau', description: 'Dأ©tente dominicale' },
-        { time: '23:00', show: 'Nuit Café', host: 'Programmation automatique', description: 'Nuit paisible' }
+        { time: '20:00', show: 'Chill Out', host: 'Antoine Moreau', description: 'Dtente dominicale' },
+        { time: '23:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Nuit paisible' }
     ]
 };
 
@@ -404,76 +409,106 @@ function showSchedule(day) {
 
 // Current show updates
 function updateCurrentShow() {
-    const shows = [
-        {
-            title: 'Réveil Dali',
-            host: 'Marie Dubois',
-            description: 'Dأ©marrez votre journأ©e avec les plus belles mأ©lodies jazz, accompagnأ©es des meilleurs cafés du monde.',
-            time: '06:00 - 09:00'
-        },
-        {
-            title: 'Relais Radio wave 103 FM',
-            host: 'Sophie Martin',
-            description: 'Un voyage musical أ  travers les genres, accompagnأ© des meilleurs cafés du monde. Dأ©couvertes musicales et histoires de grains.',
-            time: '14:00 - 15:00'
-        },
-		{
-            title: 'Relais Radio K_Rose',
-            host: 'Sophie Martin',
-            description: 'Un voyage musical أ  travers les genres, accompagnأ© des meilleurs cafés du monde. Dأ©couvertes musicales et histoires de grains.',
-            time: '17:00 - 18:00'
-        },
-        {
-            title: 'Soirأ©e Acoustique',
-            host: 'Pierre Leroy',
-            description: 'Guitares et voix dans l\'intimitأ© du studio. Musique acoustique et Café artisanal.',
-            time: '19:00 - 21:00'
-        },
-        {
-            title: 'Mix du Soir',
-            host: 'Antoine Moreau',
-            description: 'Électronique et ambiances nocturnes pour accompagner vos soirأ©es Café.',
-            time: '21:00 - 23:00'
-        }
-    ];
-    
-    // Simulate current show based on time
-    const currentHour = new Date().getHours();
-    let currentShow;
-    
-    if (currentHour >= 6 && currentHour < 9) {
-        currentShow = shows[0];
-    } else if (currentHour >= 14 && currentHour < 16) {
-        currentShow = shows[1];
-    } else if (currentHour >= 19 && currentHour < 21) {
-        currentShow = shows[2];
-    } else if (currentHour >= 21 && currentHour < 23) {
-        currentShow = shows[3];
-    } else {
-        currentShow = {
-            title: 'Nuit Café',
-            host: 'Programmation Automatique',
-            description: 'Musique douce et ambiances nocturnes pour accompagner vos nuits Café.',
-            time: '23:00 - 06:00'
-        };
+    if (apiConnected) {
+        loadCurrentShow();
+        return;
     }
-    
-    // Update current show display (seulement si pas connectأ© أ  l'API)
-    if (!apiConnected) {
+
+    // Get current day in French
+    const days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+    const currentDayIndex = new Date().getDay();
+    const currentDay = days[currentDayIndex];
+
+    // Get shows for the current day
+    const dayShows = scheduleData[currentDay];
+    if (!dayShows || dayShows.length === 0) {
+        updateUIWithDefaultNightShow();
+        return;
+    }
+
+    // Sort shows by start time
+    const sortedShows = [...dayShows].sort((a, b) => parseTime(a.time) - parseTime(b.time));
+
+    // Current time in minutes
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let currentShow = null;
+    let currentShowIndex = -1;
+
+    // Find the current show
+    for (let i = 0; i < sortedShows.length; i++) {
+        const show = sortedShows[i];
+        const start = parseTime(show.time);
+        let end;
+        if (i < sortedShows.length - 1) {
+            end = parseTime(sortedShows[i + 1].time);
+        } else {
+            end = 24 * 60; // midnight
+        }
+
+        if (currentMinutes >= start && currentMinutes < end) {
+            currentShow = show;
+            currentShowIndex = i;
+            break;
+        }
+    }
+
+    if (currentShow) {
+        // Update UI with current show
         document.getElementById('current-show-title').textContent = currentShow.title;
         document.getElementById('current-host').textContent = currentShow.host;
         document.getElementById('current-description').textContent = currentShow.description;
-        document.querySelector('.show-time').textContent = currentShow.time;
-        
-        // Update track info in player
+
+        // Format time range
+        const startTime = parseTime(currentShow.time);
+        let endTime;
+        if (currentShowIndex < sortedShows.length - 1) {
+            endTime = parseTime(sortedShows[currentShowIndex + 1].time);
+        } else {
+            endTime = 24 * 60;
+        }
+        const startStr = formatTime(startTime);
+        const endStr = formatTime(endTime);
+        document.querySelector('.show-time').textContent = `${startStr} - ${endStr}`;
+
+        // Update player track info
         document.querySelector('.track-title').textContent = currentShow.title;
         document.querySelector('.track-artist').textContent = 'avec ' + currentShow.host;
+    } else {
+        // No show found, show default
+        updateUIWithDefaultNightShow();
     }
+}
+
+function parseTime(timeStr) {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + (minutes || 0);
+}
+
+function formatTime(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours.toString().padStart(2, '0')}h${mins.toString().padStart(2, '0')}`;
+}
+
+function updateUIWithDefaultNightShow() {
+    const defaultShow = {
+        title: 'Nuit Caf',
+        host: 'Programmation Automatique',
+        description: 'Musique douce et ambiances nocturnes pour accompagner vos nuits Caf.'
+    };
+    document.getElementById('current-show-title').textContent = defaultShow.title;
+    document.getElementById('current-host').textContent = defaultShow.host;
+    document.getElementById('current-description').textContent = defaultShow.description;
+    document.querySelector('.show-time').textContent = '23h00 - 06h00';
+    document.querySelector('.track-title').textContent = defaultShow.title;
+    document.querySelector('.track-artist').textContent = 'avec ' + defaultShow.host;
 }
 
 // Listener counter simulation
 function initializeListenerCounter() {
-    if (apiConnected) return; // L'API gأ¨re dأ©jأ  cela
+    if (apiConnected) return; // L'API gère déjà cela
     
     const listenerCount = document.getElementById('listeners-count');
     let baseCount = 247;
@@ -486,7 +521,7 @@ function initializeListenerCounter() {
     }, 10000); // Update every 10 seconds
 }
 
-// ًں“§ GESTION FORMULAIRE CONTACT AMأ‰LIORأ‰E
+// “ GESTION FORMULAIRE CONTACT AM‰LIOR‰E
 async function handleContactForm(e) {
     e.preventDefault();
     
@@ -498,7 +533,7 @@ async function handleContactForm(e) {
         message: formData.get('message')
     };
     
-    // Dأ©terminer le type de message
+    // Dterminer le type de message
     let type = 'message';
     if (messageData.subject === 'dedicace') {
         type = 'dedicace';
@@ -524,29 +559,29 @@ async function handleContactForm(e) {
                 const result = await response.json();
                 
                 if (result.success) {
-                    showNotification('ًں“، Message envoyأ© avec succأ¨s ! L\'أ©quipe vous rأ©pondra rapidement.', 'success');
+                    showNotification('“ Message envoy avec succs ! L\'quipe vous rpondra rapidement.', 'success');
                 } else {
                     throw new Error(result.error);
                 }
             } catch (error) {
                 console.error('Erreur envoi message:', error);
-                showNotification('âڑ ï¸ڈ Erreur lors de l\'envoi. Veuillez rأ©essayer.', 'error');
+                showNotification(' Erreur lors de l\'envoi. Veuillez ressayer.', 'error');
                 return;
             }
         } else {
             // Mode autonome - simulation
-            showNotification('ًں“، Merci pour votre message ! L\'أ©quipe de Radio Zigomar vous rأ©pondra rapidement.', 'success');
-            console.log('ًں“§ Message reأ§u (mode autonome):', messageData);
+            showNotification('“ Merci pour votre message ! L\'quipe de Radio Zigomar vous rpondra rapidement.', 'success');
+            console.log('“ Message reu (mode autonome):', messageData);
         }
         
         // Reset form
         e.target.reset();
     } else {
-        showNotification('âڑ ï¸ڈ Veuillez remplir tous les champs du formulaire.', 'error');
+        showNotification(' Veuillez remplir tous les champs du formulaire.', 'error');
     }
 }
 
-// Show notification (fonction conservأ©e)
+// Show notification
 function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
@@ -604,17 +639,6 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Utility function for smooth scrolling to sections
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-        section.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-}
-
 // Add interactive features
 document.addEventListener('DOMContentLoaded', function() {
     // Add hover effects to buttons
@@ -637,9 +661,6 @@ document.addEventListener('DOMContentLoaded', function() {
         img.style.opacity = '0';
         img.style.transition = 'opacity 0.5s ease';
     });
-    
-    // Update current show every hour
-    setInterval(updateCurrentShow, 3600000); // 1 hour
     
     // Add click effects to interactive elements
     document.querySelectorAll('.team-member, .relay-item, .network-item').forEach(item => {
@@ -698,7 +719,7 @@ document.addEventListener('keydown', function(e) {
 
 // Add social media sharing functionality
 function shareOnSocial(platform, text, url) {
-    const shareText = encodeURIComponent(text || 'أ‰coutez Radio Zigomar 98.3 FM - La voix du Café !');
+    const shareText = encodeURIComponent(text || '‰coutez Radio Zigomar 98.3 FM - La voix du Caf !');
     const shareUrl = encodeURIComponent(url || window.location.href);
     
     let shareLink = '';
@@ -722,15 +743,15 @@ function shareOnSocial(platform, text, url) {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('ًںژµ Radio Zigomar 98.3 FM - Site web chargأ© avec succأ¨s !');
-    console.log('ًں“» Flux audio: https://stream.zeno.fm/ljjignydycktv');
+    console.log(' Radio Zigomar 98.3 FM - Site web charg avec succs !');
+    console.log('“ Flux audio: https://stream.zeno.fm/ljjignydycktv');
     
     // Add some easter eggs
     let clickCount = 0;
     document.querySelector('.radio-icon').addEventListener('click', function() {
         clickCount++;
         if (clickCount === 5) {
-            showNotification('ًںژ‰ Vous avez trouvأ© l\'easter egg ! Merci d\'أ©couter Radio Zigomar !', 'success');
+            showNotification('‰ Vous avez trouv l\'easter egg ! Merci d\'couter Radio Zigomar !', 'success');
             clickCount = 0;
         }
     });
