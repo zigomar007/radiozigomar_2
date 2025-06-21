@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSchedule();
     updateCurrentShow();
     initializeListenerCounter();
+    connectToAPI();
 
     // Contact form handling
     contactForm.addEventListener('submit', handleContactForm);
@@ -71,41 +72,120 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Audio Player functionality
+// ًںژµ LECTEUR AUDIO AVEC VRAI FLUX
+let audioPlayer = null;
 let isPlaying = false;
 let currentVolume = 70;
+
+// URLs du flux Radio Zigomar
+const STREAM_URLS = [
+    'https://stream.zeno.fm/ljjignydycktv',
+    'https://stream.zeno.fm/ljjignydycktv.m3u8'
+];
 
 function initializePlayer() {
     const playBtn = document.getElementById('play-btn');
     const volumeSlider = document.getElementById('volume-slider');
     
+    // Crأ©er l'أ©lأ©ment audio
+    audioPlayer = new Audio();
+    audioPlayer.crossOrigin = 'anonymous';
+    audioPlayer.preload = 'none';
+    
+    // Essayer les diffأ©rentes URLs de flux
+    audioPlayer.src = STREAM_URLS[0];
+    
+    // أ‰vأ©nements audio
+    audioPlayer.addEventListener('loadstart', () => {
+        console.log('ًںژµ Chargement du flux Radio Zigomar...');
+    });
+    
+    audioPlayer.addEventListener('canplay', () => {
+        console.log('ًںژµ Flux prأھt أ  أھtre lu');
+        showNotification('ًں“» Radio Zigomar 89.3 FM - Flux connectأ© !', 'success');
+    });
+    
+    audioPlayer.addEventListener('playing', () => {
+        console.log('ًںژµ Lecture en cours');
+        isPlaying = true;
+        updatePlayerUI();
+    });
+    
+    audioPlayer.addEventListener('pause', () => {
+        console.log('âڈ¸ï¸ڈ Lecture en pause');
+        isPlaying = false;
+        updatePlayerUI();
+    });
+    
+    audioPlayer.addEventListener('error', (e) => {
+        console.error('â‌Œ Erreur audio:', e);
+        // Essayer l'URL alternative
+        if (audioPlayer.src === STREAM_URLS[0]) {
+            console.log('ًں”„ Tentative avec URL alternative...');
+            audioPlayer.src = STREAM_URLS[1];
+            if (isPlaying) {
+                audioPlayer.play().catch(console.error);
+            }
+        } else {
+            showNotification('âڑ ï¸ڈ Problأ¨me de connexion au flux. Veuillez rأ©essayer.', 'error');
+        }
+    });
+    
+    audioPlayer.addEventListener('stalled', () => {
+        console.log('âڈ³ Flux en attente...');
+        showNotification('âڈ³ Connexion au flux en cours...', 'info');
+    });
+    
+    // Contrأ´les
     playBtn.addEventListener('click', togglePlay);
     volumeSlider.addEventListener('input', adjustVolume);
+    
+    // Volume initial
+    audioPlayer.volume = currentVolume / 100;
     
     // Simulate audio visualizer
     animateVisualizer();
 }
 
 function togglePlay() {
+    if (!audioPlayer) return;
+    
+    if (isPlaying) {
+        audioPlayer.pause();
+        showNotification('âڈ¸ï¸ڈ Radio Zigomar - Lecture en pause', 'info');
+    } else {
+        // Demander la permission pour l'autoplay si nأ©cessaire
+        audioPlayer.play().then(() => {
+            showNotification('ًںژµ Radio Zigomar 89.3 FM - En direct !', 'success');
+        }).catch(error => {
+            console.error('Erreur lecture:', error);
+            if (error.name === 'NotAllowedError') {
+                showNotification('ًں”ٹ Cliquez pour autoriser la lecture audio', 'warning');
+            } else {
+                showNotification('âڑ ï¸ڈ Erreur de connexion au flux', 'error');
+            }
+        });
+    }
+}
+
+function updatePlayerUI() {
     const playIcon = document.querySelector('.play-icon');
     const pauseIcon = document.querySelector('.pause-icon');
-    
-    isPlaying = !isPlaying;
     
     if (isPlaying) {
         playIcon.style.display = 'none';
         pauseIcon.style.display = 'inline';
-        showNotification('ًںژµ Lecture en cours - Radio Zigomar 89.3 FM', 'success');
     } else {
         playIcon.style.display = 'inline';
         pauseIcon.style.display = 'none';
-        showNotification('âڈ¸ï¸ڈ Lecture en pause', 'info');
     }
 }
 
 function adjustVolume(e) {
     currentVolume = e.target.value;
-    // In a real implementation, this would control actual audio volume
+    if (audioPlayer) {
+        audioPlayer.volume = currentVolume / 100;
+    }
 }
 
 function animateVisualizer() {
@@ -125,14 +205,90 @@ function animateVisualizer() {
     }, 200);
 }
 
-// Schedule data
+// ًںŒگ CONNEXION API
+let apiConnected = false;
+
+async function connectToAPI() {
+    try {
+        const response = await fetch('/api/stats');
+        if (response.ok) {
+            apiConnected = true;
+            console.log('ًںŒگ API connectأ©e');
+            loadCurrentShow();
+            loadPlaylist();
+            startRealTimeUpdates();
+        }
+    } catch (error) {
+        console.log('ًں“، Mode autonome (pas de serveur Node.js)');
+        apiConnected = false;
+    }
+}
+
+async function loadCurrentShow() {
+    if (!apiConnected) return;
+    
+    try {
+        const response = await fetch('/api/current-show');
+        const show = await response.json();
+        
+        document.getElementById('current-show-title').textContent = show.title;
+        document.getElementById('current-host').textContent = show.host;
+        document.getElementById('current-description').textContent = show.description;
+        document.getElementById('listeners-count').textContent = show.listeners;
+        
+        // Mettre أ  jour le lecteur
+        document.querySelector('.track-title').textContent = show.title;
+        document.querySelector('.track-artist').textContent = 'avec ' + show.host;
+    } catch (error) {
+        console.error('Erreur chargement أ©mission:', error);
+    }
+}
+
+async function loadPlaylist() {
+    if (!apiConnected) return;
+    
+    try {
+        const response = await fetch('/api/playlist');
+        const playlist = await response.json();
+        
+        if (playlist.currentTrack) {
+            document.querySelector('.track-title').textContent = playlist.currentTrack.title;
+            document.querySelector('.track-artist').textContent = playlist.currentTrack.artist;
+        }
+    } catch (error) {
+        console.error('Erreur chargement playlist:', error);
+    }
+}
+
+function startRealTimeUpdates() {
+    if (!apiConnected) return;
+    
+    // Mettre أ  jour les stats toutes les 30 secondes
+    setInterval(async () => {
+        try {
+            const response = await fetch('/api/stats');
+            const stats = await response.json();
+            
+            document.getElementById('listeners-count').textContent = stats.listeners;
+            
+            if (stats.currentTrack) {
+                document.querySelector('.track-title').textContent = stats.currentTrack.title;
+                document.querySelector('.track-artist').textContent = stats.currentTrack.artist;
+            }
+        } catch (error) {
+            console.error('Erreur mise أ  jour stats:', error);
+        }
+    }, 30000);
+}
+
+// Schedule data (conservأ© pour le mode autonome)
 const scheduleData = {
     lundi: [
         { time: '06:00', show: 'Rأ©veil Dali', host: 'Marie Dubois', description: 'Dأ©marrez la journأ©e en douceur avec du jazz et des infos locales' },
         { time: '09:00', show: 'Cafأ© Zigomar', host: 'Pierre Leroy', description: 'Dأ©couvertes musicales et histoires de grains' },
         { time: '12:00', show: 'Pause Dأ©jeuner', host: 'Sophie Martin', description: 'Musique relaxante pour votre pause' },
         { time: '14:00', show: 'Relais Radio wave 103 FM', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
-	{ time: '15:00', show: 'L heure du Raî', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
+		{ time: '15:00', show: 'L heure du Raî', host: 'Sophie Martin', description: 'Un voyage musical أ  travers les genres' },
         { time: '16:00', show: 'نوار عشية', host: 'Cafأ© Milano', description: 'Direct depuis notre partenaire italien' },
         { time: '17:00', show: 'Relais Radio K_Rose', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
         { time: '19:00', show: 'Relais Radio Nostaljinin', host: 'Pierre Leroy', description: 'Guitares et voix, intimitأ© garantie' },
@@ -302,19 +458,23 @@ function updateCurrentShow() {
         };
     }
     
-    // Update current show display
-    document.getElementById('current-show-title').textContent = currentShow.title;
-    document.getElementById('current-host').textContent = currentShow.host;
-    document.getElementById('current-description').textContent = currentShow.description;
-    document.querySelector('.show-time').textContent = currentShow.time;
-    
-    // Update track info in player
-    document.querySelector('.track-title').textContent = currentShow.title;
-    document.querySelector('.track-artist').textContent = 'avec ' + currentShow.host;
+    // Update current show display (seulement si pas connectأ© أ  l'API)
+    if (!apiConnected) {
+        document.getElementById('current-show-title').textContent = currentShow.title;
+        document.getElementById('current-host').textContent = currentShow.host;
+        document.getElementById('current-description').textContent = currentShow.description;
+        document.querySelector('.show-time').textContent = currentShow.time;
+        
+        // Update track info in player
+        document.querySelector('.track-title').textContent = currentShow.title;
+        document.querySelector('.track-artist').textContent = 'avec ' + currentShow.host;
+    }
 }
 
 // Listener counter simulation
 function initializeListenerCounter() {
+    if (apiConnected) return; // L'API gأ¨re dأ©jأ  cela
+    
     const listenerCount = document.getElementById('listeners-count');
     let baseCount = 247;
     
@@ -326,31 +486,67 @@ function initializeListenerCounter() {
     }, 10000); // Update every 10 seconds
 }
 
-// Contact form handling
-function handleContactForm(e) {
+// ًں“§ GESTION FORMULAIRE CONTACT AMأ‰LIORأ‰E
+async function handleContactForm(e) {
     e.preventDefault();
     
     const formData = new FormData(e.target);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const subject = formData.get('subject');
-    const message = formData.get('message');
+    const messageData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message')
+    };
     
-    if (name && email && subject && message) {
-        // Show success message
-        showNotification('ًں“، Merci pour votre message ! L\'أ©quipe de Radio Zigomar vous rأ©pondra rapidement.', 'success');
+    // Dأ©terminer le type de message
+    let type = 'message';
+    if (messageData.subject === 'dedicace') {
+        type = 'dedicace';
+    } else if (messageData.subject === 'programmation') {
+        type = 'suggestion';
+    }
+    
+    if (messageData.name && messageData.email && messageData.subject && messageData.message) {
+        // Essayer d'envoyer via l'API si disponible
+        if (apiConnected) {
+            try {
+                const response = await fetch('/api/messages/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ...messageData,
+                        type
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('ًں“، Message envoyأ© avec succأ¨s ! L\'أ©quipe vous rأ©pondra rapidement.', 'success');
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error('Erreur envoi message:', error);
+                showNotification('âڑ ï¸ڈ Erreur lors de l\'envoi. Veuillez rأ©essayer.', 'error');
+                return;
+            }
+        } else {
+            // Mode autonome - simulation
+            showNotification('ًں“، Merci pour votre message ! L\'أ©quipe de Radio Zigomar vous rأ©pondra rapidement.', 'success');
+            console.log('ًں“§ Message reأ§u (mode autonome):', messageData);
+        }
         
         // Reset form
         e.target.reset();
-        
-        // In a real application, you would send this data to a server
-        console.log('Radio contact form submitted:', { name, email, subject, message });
     } else {
         showNotification('âڑ ï¸ڈ Veuillez remplir tous les champs du formulaire.', 'error');
     }
 }
 
-// Show notification
+// Show notification (fonction conservأ©e)
 function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
@@ -527,6 +723,7 @@ function shareOnSocial(platform, text, url) {
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('ًںژµ Radio Zigomar 89.3 FM - Site web chargأ© avec succأ¨s !');
+    console.log('ًں“» Flux audio: https://stream.zeno.fm/ljjignydycktv');
     
     // Add some easter eggs
     let clickCount = 0;
