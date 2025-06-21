@@ -351,7 +351,7 @@ const scheduleData = {
         { time: '15:00', show: 'L heure du Ra', host: 'Sophie Martin', description: 'Un voyage musical  travers les genres' },
         { time: '16:00', show: ' ', host: 'Caf Milano', description: 'Direct depuis notre partenaire italien' },
         { time: '17:00', show: 'Relais Radio Nostaljinin', host: 'Marie Dubois', description: 'Les grands classiques du jazz' },
-        { time: '19:00', show: 'Relais Radio Radio K_Rose', host: 'Pierre Leroy', description: 'Guitares et voix, intimit garantie' },
+        { time: '19:00', show: 'Relais Radio Radio K_Rose', host: 'Mary-Beth Maybell', description: 'country : guitares et voix, intimit garantie' },
         { time: '20:00', show: 'Mix du Soir', host: 'Antoine Moreau', description: 'lectronique et ambiances nocturnes' },
         { time: '21:00', show: 'Nuit Caf', host: 'Programmation automatique', description: 'Musique douce pour la nuit' },
         { time: '23:00', show: 'Nuit Fernando-Italiano', host: 'Programmation automatique', description: 'Musique douce pour la nuit' }
